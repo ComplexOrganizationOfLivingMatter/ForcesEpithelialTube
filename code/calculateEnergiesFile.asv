@@ -13,9 +13,17 @@ function tableEnergies = calculateEnergiesFile(rawVerticesTable,adhesion,l_c,con
             tableEnergiesRow.cellID = row2check.CellIDs;
             tableEnergiesRow.tipCell = row2check.TipCells;
             tableEnergiesRow.borderCell = row2check.BorderCell;
+            %get neighbours from repeated vertices
+            idsNeigh = obtainNeighboursIDs(srTable,tableEnergiesRow.cellID);
             
-            obtainNeighboursIDs(srTable)
+            tableEnergiesRow.neighboursIDs={idsNeigh};
+            verticesCell = table2array(row2check(:,5:end));
+            verticesCell(isnan(verticesCell))=[];
+            verticesX = verticesCell(1:2:end);
+            verticesY = verticesCell(2:2:end);
             
+            
+            tableEnergiesRow.vertexesXY = {verticesCell};
             
             tableEnergies = [tableEnergies;tableEnergiesRow];
         end        
