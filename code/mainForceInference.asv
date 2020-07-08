@@ -2,11 +2,14 @@ clear all
 
 SRmax = 4; % SR 4 or 1.75
 copyAdhesionA0FromGlands = 0; %true or false
-setOfParams{[4,0]}
+setOfParams={[4,0],[4,1],[1.75,0],[1.75,1]};
 path2load = '..\data\';
 
-for i=1:length(setOfParams)
-    [filePath, path2saveVoronoi,path2saveFrusta] = chooseVoronoiFrustaPath(SRmax,copyAdhesionA0FromGlands,path2load);
+for i=3:length(setOfParams)
+    params = setOfParams{i};
+    SRmax = params(1);
+    copyAdhesionA0FromGlands = params(2);
+    [filePath, path2saveVoronoi,path2saveFrusta,path2loadVoronoi, path2loadFrusta] = chooseVoronoiFrustaPath(SRmax,copyAdhesionA0FromGlands,path2load);
     path2saveSalGlandWT = [path2load 'DataForces\SalivaryGlandWT\'];
 
     load(filePath,'tableContractilitySalGlandWT','tableContractilityVoronoi','tableContractilityFrusta','adhesionSalGland_WT','adhesionVoronoi','adhesionFrusta','l_cSalGlandWT','l_cVoronoi','l_cFrusta');

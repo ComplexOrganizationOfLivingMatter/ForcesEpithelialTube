@@ -4,7 +4,7 @@ function tableEnergies = calculateEnergiesFile(rawVerticesTable,adhesion,l_c,con
    
     for nSr = 1:length(SR)
         
-        srTable = rawVerticesTable(ismember(rawVerticesTable.Radius,SR(nSr)),:);
+        srTable = rawVerticesTable(ismember(round(rawVerticesTable.Radius,3),round(SR(nSr),3)),:);
         
         for nCell = 1:size(srTable,1) 
             tableEnergiesRow = array2table(zeros(1,length(columnsTable)),'VariableNames', columnsTable);
@@ -19,10 +19,13 @@ function tableEnergies = calculateEnergiesFile(rawVerticesTable,adhesion,l_c,con
             tableEnergiesRow.neighboursIDs={idsNeigh};
             verticesCell = table2array(row2check(:,5:end));
             verticesCell(isnan(verticesCell))=[];
+            if verticesCell(1:2)== verticesCell(end-1:end)
+                verticesCell = verticesCell(1:end-2);
+            end
             tableEnergiesRow.vertexesXY = {verticesCell};
 
             %get non-dimensional edges -> l/l_c
-            [ls_edge_nd, ls_angles] = calculateLengthAngleNonDimensional(verticesCell,l_c);
+            [ls_edge_nd, ls_angles] = calculateLengthAngleNonDimensional([verticesCell,verticesCell(1:2)],l_c);
             tableEnergiesRow.edgesLength = {ls_edge_nd};
             tableEnergiesRow.edgesAngle = {ls_angles};
             
@@ -41,7 +44,7 @@ function tableEnergies = calculateEnergiesFile(rawVerticesTable,adhesion,l_c,con
             if nSr == 1
                 tableEnergiesRow.numberOfApicoBasalTransitions = 0;
             else
-                srTableAux = tableEnergies(ismember(tableEnergies.SR,SR(nSr-1)),:);
+                srTableAux = tableEnergies(ismember(round(tableEnergies.SR,3),round(SR(nSr-1),3)),:);
                 id2Check = srTableAux.cellID == tableEnergiesRow.cellID;
                 rowAux2check = srTableAux(id2Check,:);
                 rowAux2check = rowAux2check(1,:);

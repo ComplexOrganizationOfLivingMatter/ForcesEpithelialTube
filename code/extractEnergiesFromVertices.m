@@ -1,17 +1,13 @@
 function extractEnergiesFromVertices(typeName,tableContractility,l_c,adhesion,path2load,path2save)
+delete(gcp('nocreate'))
 
 SR = tableContractility.SR;
 columnsNames=l_c.Properties.VariableNames;
 filesToChoose=cellfun(@(x) str2double(strrep(x,typeName,'')), columnsNames);
+files =  dir([path2load '*xls']);
 
-if strcmp(typeName,'Voronoi') || strcmp(typeName,'Frusta') 
-    files = dir([path2load 'RawExcelsWithVertices\' typeName '\SR5\*xls']);
-else
-    files =  dir([path2load 'RawExcelsWithVertices\' typeName '\*xls']);
-end
 
-delete(gcp('nocreate'))
-
+%parpool(5)
 for nFile = 1:size(files,1)
     if strcmp(typeName,'Voronoi') || strcmp(typeName,'Frusta')        
         splName = strsplit(files(nFile).name,'realization');
@@ -26,7 +22,7 @@ for nFile = 1:size(files,1)
         files(nFile).name
         auxTable = readtable([files(nFile).folder '\' files(nFile).name]);
         %Filter by SR
-        auxTableFiltered = auxTable(ismember(auxTable.Radius,SR),:);
+        auxTableFiltered = auxTable(ismember(round(auxTable.Radius,3),round(SR,3)),:);
         %get corresponding adhesion, contractility and lc
         idSimulation = ismember(filesToChoose,str2double(splName{1}));
         adhesionFile = table2array(adhesion(1,find(idSimulation)));

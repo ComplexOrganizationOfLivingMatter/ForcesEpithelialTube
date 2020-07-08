@@ -46,13 +46,11 @@ tableContractilityFrusta = array2table([SR_Frusta', contractibilitiesFrusta'],'V
 
 %Salivary gland WT
 SR_WT=1:0.5:4;
-glandNumberMatchingOrder = 1:20;
 SalGlandWTFilesName = 1:20;
 SalGlandWTFilesToChooseName = arrayfun(@(x) ['SalGlandWT' num2str(x)], SalGlandWTFilesName,'UniformOutput',false);
 
-files = dir('..\excelsWithVertices\SalivaryGlandWT\*xls');
+files = dir('..\excelsWithVertices\SalGlandWT\*xls');
 salGlandWTName = {files(:).name};
-salGlandWTNameSorted = salGlandWTName(glandNumberMatchingOrder);
 
 contractibilitiesSalGland_WT = [0.019	0.017	0.005	0	0	0	0;
 0.013	0.02	0.008	0	0	0	0;
@@ -132,7 +130,7 @@ save([path2Store 'linearProgramingParameter_untilSR4_SalGlandWT_adhesion_A0_' da
 voronoiFilesToChoose = [1,2,3,4,5,6,8,9,10,11]; 
 
 voronoiFilesToChooseName = arrayfun(@(x) ['Voronoi' num2str(x)], voronoiFilesToChoose,'UniformOutput',false);
-SR_Voronoi = [1	1.09	1.18	1.28	1.37	1.46	1.56	1.66	1.75];
+SR_Voronoi = round(1:(0.75/8):1.75,3);
 
 contractibilitiesVoronoi = [0.023	0.018	0.014	0.01	0.005	0.001	0	0	0;
 0.022	0.017	0.013	0.009	0.005	0.001	0	0	0;
@@ -174,7 +172,7 @@ save([path2Store 'linearProgramingParameter_untilSR175_' date '.mat'],'tableCont
 voronoiFilesToChoose = [1,2,3,4,5,6,8,9,10,11]; 
 
 voronoiFilesToChooseName = arrayfun(@(x) ['Voronoi' num2str(x)], voronoiFilesToChoose,'UniformOutput',false);
-SR_Voronoi = [1	1.09	1.18	1.28	1.37	1.46	1.56	1.66	1.75];
+SR_Voronoi =round(1:(0.75/8):1.75,3);
 
 contractibilitiesVoronoi = [0.035	0.034	0.029	0.024	0.02	0.017	0.016	0.014	0.012;
 0.037	0.032	0.029	0.025	0.02	0.016	0.014	0.013	0.013;
