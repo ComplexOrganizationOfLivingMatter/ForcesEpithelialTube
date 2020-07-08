@@ -1,9 +1,14 @@
+data/
+results/
+docs/
 
+*.txt
 *.asv
-*.xls
+*.ini
 *.mat
-*/data/*
-*/results/*
-*.asv
-*.asv
-*.asv
+*.png
+*.fig
+*.xls
+.DS_Store
+*.xlsx
+*.tif
