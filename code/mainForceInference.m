@@ -5,7 +5,7 @@ copyAdhesionA0FromGlands = 0; %true or false
 setOfParams={[4,0],[4,1],[1.75,0],[1.75,1]};
 path2load = '..\data\';
 
-for i=3:length(setOfParams)
+for i=1:length(setOfParams)
     params = setOfParams{i};
     SRmax = params(1);
     copyAdhesionA0FromGlands = params(2);
@@ -17,7 +17,9 @@ for i=3:length(setOfParams)
 
     %% Extract energy from vertices
     %%Simulations (Voronoi and Frusta)
-    extractEnergiesFromVertices('Voronoi',tableContractilityVoronoi,l_cVoronoi,adhesionVoronoi,path2loadVoronoi,path2saveVoronoi)
-    extractEnergiesFromVertices('Frusta',tableContractilityFrusta,l_cFrusta,adhesionFrusta,path2loadFrusta,path2saveFrusta)
-    extractEnergiesFromVertices('SalGlandWT',tableContractilitySalGlandWT,l_cSalGlandWT,adhesionSalGland_WT,path2loadSalGlandWT,path2saveSalGlandWT)
+     extractEnergiesFromVertices('Voronoi',tableContractilityVoronoi,l_cVoronoi,adhesionVoronoi,path2loadVoronoi,path2saveVoronoi)
+     extractEnergiesFromVertices('Frusta',tableContractilityFrusta,l_cFrusta,adhesionFrusta,path2loadFrusta,path2saveFrusta)
+    if i==1
+        extractEnergiesFromVertices('SalGlandWT',tableContractilitySalGlandWT,l_cSalGlandWT,adhesionSalGland_WT,path2loadSalGlandWT,path2saveSalGlandWT)
+    end
 end

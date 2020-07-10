@@ -7,8 +7,8 @@ filesToChoose=cellfun(@(x) str2double(strrep(x,typeName,'')), columnsNames);
 files =  dir([path2load '*xls']);
 
 
-%parpool(5)
-for nFile = 1:size(files,1)
+parpool(5)
+parfor nFile = 1:size(files,1)
     if strcmp(typeName,'Voronoi') || strcmp(typeName,'Frusta')        
         splName = strsplit(files(nFile).name,'realization');
         splName = strsplit(splName{2},'_');
@@ -22,12 +22,18 @@ for nFile = 1:size(files,1)
         files(nFile).name
         auxTable = readtable([files(nFile).folder '\' files(nFile).name]);
         %Filter by SR
-        auxTableFiltered = auxTable(ismember(round(auxTable.Radius,3),round(SR,3)),:);
+        if strcmp(typeName,'SalGlandWT')        
+            auxTableFiltered = auxTable;
+            SR = unique(auxTable.Radius);
+            SR = SR(1:7);%Get SR until 4
+        else
+            auxTableFiltered = auxTable(ismember(round(auxTable.Radius,3),round(SR,3)),:);
+        end
         %get corresponding adhesion, contractility and lc
         idSimulation = ismember(filesToChoose,str2double(splName{1}));
         adhesionFile = table2array(adhesion(1,find(idSimulation)));
         l_cFile = table2array(l_c(1,find(idSimulation)));
-        contractilityFile = table2array(tableContractility(:,idSimulation));
+        contractilityFile = table2array(tableContractility(:,logical([0 idSimulation])));
         
         %create dir to save
         if ~exist(path2save,'dir')

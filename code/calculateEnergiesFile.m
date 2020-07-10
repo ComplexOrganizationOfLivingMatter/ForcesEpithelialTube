@@ -49,7 +49,7 @@ function tableEnergies = calculateEnergiesFile(rawVerticesTable,adhesion,l_c,con
                 rowAux2check = srTableAux(id2Check,:);
                 rowAux2check = rowAux2check(1,:);
                 nDifIntersection = length(setxor([rowAux2check.neighboursIDs{:}],idsNeigh));
-                tableEnergiesRow.numberOfApicoBasalTransitions = nDifIntersection;
+                tableEnergiesRow.numberOfApicoBasalTransitions = rowAux2check.numberOfApicoBasalTransitions + nDifIntersection;
             end
             
             tableEnergies = [tableEnergies;tableEnergiesRow];
