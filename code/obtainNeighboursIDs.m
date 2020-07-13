@@ -16,7 +16,7 @@ allYs = allVertices(:,2:2:end);
 
 cellWithPairedVertices = arrayfun(@(x,y) [x,y], allXs,allYs, 'UniformOutput',false);
 
-idNeighs = cellfun(@(x) any(sum(ismember(x,verticesXYCellID),2)==2),cellWithPairedVertices);
+idNeighs = cellfun(@(x) any(sum([ismember(x(1),verticesXYCellID(:,1)),ismember(x(2),verticesXYCellID(:,2))],2)==2),cellWithPairedVertices);
 [idX,~] = find(idNeighs);
 idX = unique(idX);
 allCellsIds = table2array(srTable(:,2));

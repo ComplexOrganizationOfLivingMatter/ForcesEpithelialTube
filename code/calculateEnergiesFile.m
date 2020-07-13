@@ -1,6 +1,6 @@
 function tableEnergies = calculateEnergiesFile(rawVerticesTable,adhesion,l_c,contractility,SR,filePath2save)
     tableEnergies = table();
-    columnsTable = {'SR','cellID','tipCell','borderCell','neighboursIDs','vertexesXY','edgesLength','edgesAngle','Area','Perimeter','Gamma','Lambda','l_c','adhesionEnergy','elasticEnergy','contractilityEnergy','numberOfApicoBasalTransitions'};
+    columnsTable = {'SR','cellID','tipCell','borderCell','neighboursIDs','vertexesXY','edgesLength','edgesAngle','Area','Perimeter','Gamma','Lambda','l_c','adhesionEnergy','elasticEnergy','contractilityEnergy','numberOfApicoBasalTransitionsNext','isApicoBasalTransitionInNext'};
    
     for nSr = 1:length(SR)
         
@@ -42,15 +42,18 @@ function tableEnergies = calculateEnergiesFile(rawVerticesTable,adhesion,l_c,con
             tableEnergiesRow.elasticEnergy = ((tableEnergiesRow.Area - 1)^2)/2;
             tableEnergiesRow.contractilityEnergy = (contractility(nSr)/2)*(sum(ls_edge_nd)^2);
             if nSr == 1
-                tableEnergiesRow.numberOfApicoBasalTransitions = 0;
+                tableEnergiesRow.numberOfApicoBasalTransitionsNext = 0;
+                tableEnergiesRow.isApicoBasalTransitionInNext = 0;
             else
                 %get number of apico-basal transition in next SR
-                id2check = ismember(round(tableEnergies.SR,3),round(SR(nSr-1),3)) && (tableEnergies.cellID == tableEnergiesRow.cellID);
+                id2check = ismember(round(tableEnergies.SR,3),round(SR(nSr-1),3)) & (tableEnergies.cellID == tableEnergiesRow.cellID);
                 rowAux2check = tableEnergies(id2check,:);
                 rowAux2check = rowAux2check(1,:);
                 nDifIntersection = length(setxor([rowAux2check.neighboursIDs{:}],idsNeigh));
-                tableEnergiesRow.numberOfApicoBasalTransitions = rowAux2check.numberOfApicoBasalTransitions + nDifIntersection;
-                tableEnergies(id2check,:).numberOfApicoBasalTransitions = rowAux2check.numberOfApicoBasalTransitions + nDifIntersection;
+                
+                tableEnergiesRow.numberOfApicoBasalTransitionsNext = rowAux2check.numberOfApicoBasalTransitions + nDifIntersection;
+                tableEnergies(id2check,:).numberOfApicoBasalTransitionsNext = repmat(rowAux2check.numberOfApicoBasalTransitions + nDifIntersection,sum(id2check),1);
+                tableEnergies(id2check,:).isApicoBasalTransitionInNext= repmat(nDifIntersection>0,sum(id2check),1);
             end
             tableEnergies = [tableEnergies;tableEnergiesRow];
         end        
