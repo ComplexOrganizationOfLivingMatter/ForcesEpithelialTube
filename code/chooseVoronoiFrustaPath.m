@@ -2,17 +2,17 @@ function [filePath, path2saveVoronoi,path2saveFrusta,path2loadVoronoi,path2loadF
 
     if SRmax==4 && copyAdhesionA0FromGlands==0
        filePath = [path2load 'linearProgramingParameter_untilSR4_08-Jul-2020.mat'];
-       path2saveVoronoi = [path2load 'DataForces\Voronoi\untilSR4\'];
+       path2saveVoronoi = [path2load 'DataForces\Voronoi\untilSR\'];
        path2saveFrusta = [path2load 'DataForces\Frusta\untilSR4\'];
-       path2loadVoronoi = [path2load 'RawExcelsWithVertices\Voronoi\SR5\'];
-       path2loadFrusta = [path2load 'RawExcelsWithVertices\Frusta\SR5\'];
+       path2loadVoronoi = [path2load 'RawExcelsWithVertices\Voronoi\SR10\'];
+       path2loadFrusta = [path2load 'RawExcelsWithVertices\Frusta\SR10\'];
     end
     if SRmax==4 && copyAdhesionA0FromGlands==1
        filePath = [path2load 'linearProgramingParameter_untilSR4_SalGlandWT_adhesion_A0_08-Jul-2020.mat'];
        path2saveVoronoi = [path2load 'DataForces\Voronoi\untilSR4_AdhesionA0FromWTGlands\'];
        path2saveFrusta = [path2load 'DataForces\Frusta\untilSR4_AdhesionA0FromWTGlands\'];
-       path2loadVoronoi = [path2load 'RawExcelsWithVertices\Voronoi\SR5\'];
-        path2loadFrusta = [path2load 'RawExcelsWithVertices\Frusta\SR5\'];
+       path2loadVoronoi = [path2load 'RawExcelsWithVertices\Voronoi\SR10\'];
+        path2loadFrusta = [path2load 'RawExcelsWithVertices\Frusta\SR10\'];
     end
     if SRmax==1.75 && copyAdhesionA0FromGlands==0
         filePath = [path2load 'linearProgramingParameter_untilSR175_08-Jul-2020.mat'];
