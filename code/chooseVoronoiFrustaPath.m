@@ -2,7 +2,7 @@ function [filePath, path2saveVoronoi,path2saveFrusta,path2loadVoronoi,path2loadF
 
     if SRmax==4 && copyAdhesionA0FromGlands==0
        filePath = [path2load 'linearProgramingParameter_untilSR4_08-Jul-2020.mat'];
-       path2saveVoronoi = [path2load 'DataForces\Voronoi\untilSR\'];
+       path2saveVoronoi = [path2load 'DataForces\Voronoi\untilSR4\'];
        path2saveFrusta = [path2load 'DataForces\Frusta\untilSR4\'];
        path2loadVoronoi = [path2load 'RawExcelsWithVertices\Voronoi\SR10\'];
        path2loadFrusta = [path2load 'RawExcelsWithVertices\Frusta\SR10\'];
