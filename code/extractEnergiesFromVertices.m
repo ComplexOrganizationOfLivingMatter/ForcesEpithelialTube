@@ -2,6 +2,7 @@ function extractEnergiesFromVertices(typeName,tableContractility,l_c,adhesion,pa
 delete(gcp('nocreate'))
 
 SR = tableContractility.SR;
+maxIdSRSalGlandWT = 7;%Get SR until 4
 columnsNames=l_c.Properties.VariableNames;
 filesToChoose=cellfun(@(x) str2double(strrep(x,typeName,'')), columnsNames);
 files =  dir([path2load '*xls']);
@@ -24,10 +25,11 @@ parfor nFile = 1:size(files,1)
         %Filter by SR
         if strcmp(typeName,'SalGlandWT')        
             auxTableFiltered = auxTable;
-            SR = unique(auxTable.Radius);
-            SR = SR(1:7);%Get SR until 4
+            SRaux = unique(auxTable.Radius);
+            SRfinal = SRaux(1:maxIdSRSalGlandWT);%Get SR until 4
         else
             auxTableFiltered = auxTable(ismember(round(auxTable.Radius,3),round(SR,3)),:);
+            SRfinal = SR;
         end
         %get corresponding adhesion, contractility and lc
         idSimulation = ismember(filesToChoose,str2double(splName{1}));
@@ -44,7 +46,7 @@ parfor nFile = 1:size(files,1)
         
         %calculate table and excel with energies
         if ~exist([filePath2save '.mat'],'file')
-           calculateEnergiesFile(auxTableFiltered,adhesionFile,l_cFile,contractilityFile,SR,filePath2save);
+           calculateEnergiesFile(auxTableFiltered,adhesionFile,l_cFile,contractilityFile,SRfinal,filePath2save);
         end
 
     end

@@ -17,8 +17,8 @@ for i=1:length(setOfParams)
 
     %% Extract energy from vertices
     %%Simulations (Voronoi and Frusta)
-     extractEnergiesFromVertices('Voronoi',tableContractilityVoronoi,l_cVoronoi,adhesionVoronoi,path2loadVoronoi,path2saveVoronoi)
-     extractEnergiesFromVertices('Frusta',tableContractilityFrusta,l_cFrusta,adhesionFrusta,path2loadFrusta,path2saveFrusta)
+    extractEnergiesFromVertices('Voronoi',tableContractilityVoronoi,l_cVoronoi,adhesionVoronoi,path2loadVoronoi,path2saveVoronoi)
+    extractEnergiesFromVertices('Frusta',tableContractilityFrusta,l_cFrusta,adhesionFrusta,path2loadFrusta,path2saveFrusta)
     if i==1
         extractEnergiesFromVertices('SalGlandWT',tableContractilitySalGlandWT,l_cSalGlandWT,adhesionSalGland_WT,path2loadSalGlandWT,path2saveSalGlandWT)
     end

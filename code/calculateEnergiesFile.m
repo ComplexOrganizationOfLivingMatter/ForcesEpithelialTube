@@ -44,14 +44,14 @@ function tableEnergies = calculateEnergiesFile(rawVerticesTable,adhesion,l_c,con
             if nSr == 1
                 tableEnergiesRow.numberOfApicoBasalTransitions = 0;
             else
-                srTableAux = tableEnergies(ismember(round(tableEnergies.SR,3),round(SR(nSr-1),3)),:);
-                id2Check = srTableAux.cellID == tableEnergiesRow.cellID;
-                rowAux2check = srTableAux(id2Check,:);
+                %get number of apico-basal transition in next SR
+                id2check = ismember(round(tableEnergies.SR,3),round(SR(nSr-1),3)) && (tableEnergies.cellID == tableEnergiesRow.cellID);
+                rowAux2check = tableEnergies(id2check,:);
                 rowAux2check = rowAux2check(1,:);
                 nDifIntersection = length(setxor([rowAux2check.neighboursIDs{:}],idsNeigh));
                 tableEnergiesRow.numberOfApicoBasalTransitions = rowAux2check.numberOfApicoBasalTransitions + nDifIntersection;
+                tableEnergies(id2check,:).numberOfApicoBasalTransitions = rowAux2check.numberOfApicoBasalTransitions + nDifIntersection;
             end
-            
             tableEnergies = [tableEnergies;tableEnergiesRow];
         end        
     end
