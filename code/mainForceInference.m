@@ -1,5 +1,6 @@
 clear all
 
+addpath('lib')
 SRmax = 4; % SR 4 or 1.75
 copyAdhesionA0FromGlands = 0; %true or false
 setOfParams={[4,0],[4,1],[1.75,0],[1.75,1]};

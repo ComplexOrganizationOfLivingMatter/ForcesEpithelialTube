@@ -52,7 +52,9 @@ function tableEnergies = calculateEnergiesFile(rawVerticesTable,adhesion,l_c,con
                 nDifIntersection = length(setxor([rowAux2check.neighboursIDs{:}],idsNeigh));
                 
                 tableEnergiesRow.numberOfApicoBasalTransitionsNext = rowAux2check.numberOfApicoBasalTransitionsNext + nDifIntersection;
-                tableEnergies(id2check,:).numberOfApicoBasalTransitionsNext = repmat(rowAux2check.numberOfApicoBasalTransitionsNext + nDifIntersection,sum(id2check),1);
+                if rowAux2check.numberOfApicoBasalTransitionsNext == 0
+                    tableEnergies(id2check,:).numberOfApicoBasalTransitionsNext = repmat(rowAux2check.numberOfApicoBasalTransitionsNext + nDifIntersection,sum(id2check),1);
+                end
                 tableEnergies(id2check,:).isApicoBasalTransitionInNext= repmat(nDifIntersection>0,sum(id2check),1);
             end
             tableEnergies = [tableEnergies;tableEnergiesRow];
