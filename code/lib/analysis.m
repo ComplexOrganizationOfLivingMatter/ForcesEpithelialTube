@@ -6,7 +6,7 @@ clear all
 typeOfData = 'untilSR4_AdhesionA0FromWTGlands';
 tissue = 'SalivaryGlandWT'; % 'Frusta', 'Voronoi' or 'SalivaryGlandWT'
 
-load('D:\Pablo\ForcesEpithelialTube\results\untilSR4_AdhesionA0FromWTGlands_20_07_2020.mat')
+load(['..\..\results\' typeData '_20_07_2020.mat'])
 
 colourBand = [0 1 0; 0 0 1; 0.5 0.5 0.5];
 numSR = 7;
