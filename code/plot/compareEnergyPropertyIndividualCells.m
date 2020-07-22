@@ -109,57 +109,39 @@ function compareEnergyPropertyIndividualCells(cellTablesVoronoi,cellTablesFrusta
     %plot polar histograms along SR
     
     %% plot how evolve the cells along the SR
-    h = figure;
+    h = figure('units','normalized','outerposition',[0 0 1 1],'Visible','on');   
     %Voronoi
-    minXCoordPerCell = zeros(1,5);
-    minYCoordPerCell =zeros(1,5);
-    maxXCoordPerCell = zeros(1,5);
-    maxYCoordPerCell =zeros(1,5);
-    for nCel = 1:size(cellTablesVoronoi,1)
-        verVor= cellTablesVoronoi{nCel}.vertexesXY;
-        verFrusta= cellTablesFrusta{nCel}.vertexesXY;
-        verCell=horzcat(verVor{:},verFrusta{:});
-        minXCoordPerCell(nCel) = min(verCell(1:2:end));
-        minYCoordPerCell(nCel) = min(verCell(2:2:end));
-        maxXCoordPerCell(nCel) = max(verCell(1:2:end));
-        maxYCoordPerCell(nCel) = max(verCell(2:2:end));
-    end
-     
     counter=1;
     for j = 1:numSR
         for i = 1:size(cellTablesVoronoi,1)
             nameVoronoi = cellTablesVoronoi{i}.fileNameCol{1};
             nameVoronoi = strrep(nameVoronoi,'Voronoi','');
             nameVoronoi = strrep(nameVoronoi,'_forces.mat','');
-            subplot(numSR,size(cellTablesVoronoi,1)*2,counter);
+            subplot(numSR,size(cellTablesVoronoi,1),counter);
             vertices = cellTablesVoronoi{i}.vertexesXY;
             verticesSR = vertices{j};
             plot([verticesSR(1:2:end) verticesSR(1)],[verticesSR(2:2:end) verticesSR(2)],'LineWidth',2,'Color',colour(2,:))
-            xlim([minXCoordPerCell(i) maxXCoordPerCell(i)])
-            ylim([minYCoordPerCell(i) maxYCoordPerCell(i)])
+     
             if j==1
-                title(['Voronoi ' nameVoronoi ' - Cell ' num2str(cellTablesVoronoi{i}.cellID(1))] )
+                title(['Realization ' nameVoronoi ' - Cell ' num2str(cellTablesVoronoi{i}.cellID(1))] )
             end
+            axis equal
             hold on
-            counter=counter+2;
+            counter=counter+1;
         end
     end
     
-    counter=2;
+    counter=1;
     for j = 1:numSR
         for i = 1:size(cellTablesFrusta,1)
-            nameFrusta = cellTablesFrusta{i}.fileNameCol{1};
-            nameFrusta = strrep(nameFrusta,'Frusta','');
-            nameFrusta = strrep(nameFrusta,'_forces.mat','');
-            subplot(numSR,size(cellTablesFrusta,1)*2,counter);
+            subplot(numSR,size(cellTablesFrusta,1),counter);
             vertices = cellTablesFrusta{i}.vertexesXY;
             verticesSR = vertices{j};
             plot([verticesSR(1:2:end) verticesSR(1)],[verticesSR(2:2:end) verticesSR(2)],'LineWidth',2,'Color',colour(3,:))
-            xlim([minXCoordPerCell(i) maxXCoordPerCell(i)])
-            ylim([minYCoordPerCell(i) maxYCoordPerCell(i)])
+            axis equal
 
             hold on
-            counter=counter+2;
+            counter=counter+1;
         end
     end
     
@@ -171,52 +153,68 @@ function compareEnergyPropertyIndividualCells(cellTablesVoronoi,cellTablesFrusta
     h = figure('units','normalized','outerposition',[0 0 1 1],'Visible','on');   
 
     %Voronoi
-        
-    counter=1;
     for j = 1:numSR
+         edgesAdhesionEnergy = [];
+        edgesAngles = [];
+
         for i = 1:size(cellTablesVoronoi,1)
             nameVoronoi = cellTablesVoronoi{i}.fileNameCol{1};
             nameVoronoi = strrep(nameVoronoi,'Voronoi','');
             nameVoronoi = strrep(nameVoronoi,'_forces.mat','');
-            subplot(numSR,size(cellTablesVoronoi,1)*2,counter);
             edgesLength = cellTablesVoronoi{i}.edgesLength;
-            edgesAngle = cellTablesVoronoi{i}.edgesAngle{j};
+            cellEdgesAngle = cellTablesVoronoi{i}.edgesAngle{j};
             lambda = cellTablesVoronoi{i}.Lambda;
-            edgesAdhesionEnergy = edgesLength{j}.*lambda(j);
+            edgesAdhesionEnergy = [edgesAdhesionEnergy, edgesLength{j}.*lambda(j)];
+            edgesAngles = [edgesAngles cellEdgesAngle];
             
-
-            for nEdges = 1:length(edgesAngle)
-                polarplot([0 edgesAngle(nEdges)],[0 abs(edgesAdhesionEnergy(nEdges))],'LineWidth',2,'Color',colour(2,:))
-                hold on
-            end
-            if j==1
-                title(['Voronoi ' nameVoronoi ' - Cell ' num2str(cellTablesVoronoi{i}.cellID(1))] )
-            end
-            hold on
-            counter=counter+2;
+            
+           
         end
+        subplot(2,numSR,j);
+
+        for nEdges = 1:length(edgesAngles)
+            polarplot([0 edgesAngles(nEdges)],[0 abs(edgesAdhesionEnergy(nEdges))],'LineWidth',1,'Color',colour(2,:))
+            hold on
+        end
+        ax=gca;
+        ax.ThetaLimMode='manual';
+        ax.ThetaLim=[-90,90];
+        ax.GridAlpha=0.1;
+        ax.LineWidth=1;
+        ax.FontSize=12;
+        ax.FontName='Helvetica-Narrow';      
     end
     
-    counter=2;
-    for j = 1:numSR
+    %Frusta
+     for j = 1:numSR
+        edgesAdhesionEnergy = [];
+        edgesAngles = [];
+
         for i = 1:size(cellTablesFrusta,1)
             nameFrusta = cellTablesFrusta{i}.fileNameCol{1};
             nameFrusta = strrep(nameFrusta,'Frusta','');
             nameFrusta = strrep(nameFrusta,'_forces.mat','');
-            subplot(numSR,size(cellTablesFrusta,1)*2,counter);
             edgesLength = cellTablesFrusta{i}.edgesLength;
-            edgesAngle = cellTablesFrusta{i}.edgesAngle{j};
+            cellEdgesAngle = cellTablesFrusta{i}.edgesAngle{j};
             lambda = cellTablesFrusta{i}.Lambda;
-            edgesAdhesionEnergy = edgesLength{j}.*lambda(j);
-            
-            for nEdges = 1:length(edgesAngle)
-                polarplot([0 edgesAngle(nEdges)],[0 abs(edgesAdhesionEnergy(nEdges))],'LineWidth',2,'Color',colour(3,:))
-                hold on
-            end
-            
-            hold on
-            counter=counter+2;
+            edgesAdhesionEnergy = [edgesAdhesionEnergy, edgesLength{j}.*lambda(j)];
+            edgesAngles = [edgesAngles cellEdgesAngle];
+           
         end
+        subplot(2,numSR,numSR+j);
+
+        for nEdges = 1:length(edgesAngles)
+            polarplot([0 edgesAngles(nEdges)],[0 abs(edgesAdhesionEnergy(nEdges))],'LineWidth',1,'Color',colour(3,:))
+            hold on
+        end
+
+        ax=gca;
+        ax.ThetaLimMode='manual';
+        ax.ThetaLim=[-90,90];
+        ax.GridAlpha=0.1;
+        ax.LineWidth=1;
+        ax.FontSize=10;
+        ax.FontName='Helvetica-Narrow';
     end
     
     savefig(h,[path2save 'PolarDistribution_AdhesionEnergy_' date])
