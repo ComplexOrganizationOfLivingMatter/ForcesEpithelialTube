@@ -14,6 +14,10 @@ function compareEnergyPropertyIndividualCells(cellTablesVoronoi,cellTablesFrusta
         subplot(1,size(cellTablesVoronoi,1),i);
         plot(cellTablesVoronoi{i}.SR,cellTablesVoronoi{i}.contractilityEnergy,'LineWidth',2,'Color',colour(2,:))
         hold on
+        for j = 1:numSR-1
+            text(cellTablesVoronoi{i}.SR(j)+0.25,cellTablesVoronoi{i}.contractilityEnergy(j),num2str(cellTablesVoronoi{i}.numberOfApicoBasalTransitionsNext(j))) 
+        end
+        hold on
     end
     
     %Frusta
@@ -33,8 +37,7 @@ function compareEnergyPropertyIndividualCells(cellTablesVoronoi,cellTablesFrusta
     end
     legend({'Voronoi','Frusta'})
     hold off
-    
-%
+
     savefig(h,[path2save 'Contractibility_' date])
     print(h,[path2save 'Contractibility_' date],'-dtiff','-r300')
     
@@ -106,7 +109,6 @@ function compareEnergyPropertyIndividualCells(cellTablesVoronoi,cellTablesFrusta
     print(h,[path2save 'Elasticity_' date],'-dtiff','-r300')
     
     
-    %plot polar histograms along SR
     
     %% plot how evolve the cells along the SR
     h = figure('units','normalized','outerposition',[0 0 1 1],'Visible','on');   
@@ -183,6 +185,7 @@ function compareEnergyPropertyIndividualCells(cellTablesVoronoi,cellTablesFrusta
         ax.LineWidth=1;
         ax.FontSize=12;
         ax.FontName='Helvetica-Narrow';      
+        title(['SR ' num2str(cellTablesVoronoi{i}.SR(j))])
     end
     
     %Frusta
