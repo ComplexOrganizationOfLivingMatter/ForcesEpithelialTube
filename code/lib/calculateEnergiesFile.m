@@ -1,6 +1,6 @@
 function tableEnergies = calculateEnergiesFile(rawVerticesTable,adhesion,l_c,contractility,SR,filePath2save)
     tableEnergies = table();
-    columnsTable = {'SR','cellID','tipCell','borderCell','neighboursIDs','vertexesXY','edgesLength','edgesAngle','Area','Perimeter','Gamma','Lambda','l_c','adhesionEnergy','elasticEnergy','contractilityEnergy','numberOfApicoBasalTransitionsNext','isApicoBasalTransitionInNext'};
+    columnsTable = {'SR','cellID','tipCell','borderCell','neighboursIDs','vertexesXY','edgesLength','edgesAngle','Area','Perimeter','majorAxisLength','minorAxisLength','axesLengthRelation','cellOrientation','Gamma','Lambda','l_c','adhesionEnergy','elasticEnergy','contractilityEnergy','numberOfApicoBasalTransitionsNext','isApicoBasalTransitionInNext'};
    
     for nSr = 1:length(SR)
         
@@ -24,14 +24,18 @@ function tableEnergies = calculateEnergiesFile(rawVerticesTable,adhesion,l_c,con
             end
             tableEnergiesRow.vertexesXY = {verticesCell};
 
-            %get non-dimensional edges -> l/l_c
-            [ls_edge_nd, ls_angles] = calculateLengthAngleNonDimensional([verticesCell,verticesCell(1:2)],l_c);
+            %get non-dimensional edges -> l/l_c  && non-dimensional area -> area/l_c^2
+            [ls_edge_nd, ls_angles, cellArea, cellPerimeter, cellMajorAxisLength, cellMinorAxisLength, cellOrientation] = calculateLengthAngleNonDimensional([verticesCell,verticesCell(1:2)],l_c);
+            
             tableEnergiesRow.edgesLength = {ls_edge_nd};
             tableEnergiesRow.edgesAngle = {ls_angles};
+            tableEnergiesRow.Area = cellArea;
+            tableEnergiesRow.Perimeter = cellPerimeter;
+            tableEnergiesRow.majorAxisLength = cellMajorAxisLength;
+            tableEnergiesRow.minorAxisLength = cellMinorAxisLength;
+            tableEnergiesRow.axesLengthRelation = cellMajorAxisLength/cellMinorAxisLength;
+            tableEnergiesRow.cellOrientation = cellOrientation;
             
-            %get non-dimensional area -> area/l_c^2
-            tableEnergiesRow.Area = polyarea(verticesCell(1:2:end),verticesCell(2:2:end))/(l_c^2);
-            tableEnergiesRow.Perimeter = sum(ls_edge_nd);
             
             %init force inference parameters
             tableEnergiesRow.Gamma = contractility(nSr);
