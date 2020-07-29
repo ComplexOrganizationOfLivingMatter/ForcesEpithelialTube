@@ -2,7 +2,7 @@ function compareEnergyPropertyIndividualCells(cellTablesVoronoi,cellTablesFrusta
 
     mkdir(path2save)
 
-    %% plot contractility energy
+    %% plot SR vs contractility energy
     catTablesVor = vertcat(cellTablesVoronoi{:});
     catTablesFrusta = vertcat(cellTablesFrusta{:});
     maxContractibility = max(max(catTablesFrusta.contractilityEnergy),max(catTablesVor.contractilityEnergy));
@@ -152,76 +152,22 @@ function compareEnergyPropertyIndividualCells(cellTablesVoronoi,cellTablesFrusta
     
     
     %% Polar histogram adhesion energy
-    h = figure('units','normalized','outerposition',[0 0 1 1],'Visible','on');   
-
-    %Voronoi
-    for j = 1:numSR
-         edgesAdhesionEnergy = [];
-        edgesAngles = [];
-
-        for i = 1:size(cellTablesVoronoi,1)
-            nameVoronoi = cellTablesVoronoi{i}.fileNameCol{1};
-            nameVoronoi = strrep(nameVoronoi,'Voronoi','');
-            nameVoronoi = strrep(nameVoronoi,'_forces.mat','');
-            edgesLength = cellTablesVoronoi{i}.edgesLength;
-            cellEdgesAngle = cellTablesVoronoi{i}.edgesAngle{j};
-            lambda = cellTablesVoronoi{i}.Lambda;
-            edgesAdhesionEnergy = [edgesAdhesionEnergy, edgesLength{j}.*lambda(j)];
-            edgesAngles = [edgesAngles cellEdgesAngle];
-            
-            
-           
-        end
-        subplot(2,numSR,j);
-
-        for nEdges = 1:length(edgesAngles)
-            polarplot([0 edgesAngles(nEdges)],[0 abs(edgesAdhesionEnergy(nEdges))],'LineWidth',1,'Color',colour(2,:))
-            hold on
-        end
-        ax=gca;
-        ax.ThetaLimMode='manual';
-        ax.ThetaLim=[-90,90];
-        ax.GridAlpha=0.1;
-        ax.LineWidth=1;
-        ax.FontSize=12;
-        ax.FontName='Helvetica-Narrow';      
-        title(['SR ' num2str(cellTablesVoronoi{i}.SR(j))])
-    end
+    angleCorrection = 0;
+    radLim = [0,360];
+    gridAlpha = 0.1;
+    lineWidth = 1;
+    fontSize = 12;
+    dotSize = 6;
+    fontName = 'Helvetica-Narrow';
+    polarGraphic = 'polarplot';
     
-    %Frusta
-     for j = 1:numSR
-        edgesAdhesionEnergy = [];
-        edgesAngles = [];
-
-        for i = 1:size(cellTablesFrusta,1)
-            nameFrusta = cellTablesFrusta{i}.fileNameCol{1};
-            nameFrusta = strrep(nameFrusta,'Frusta','');
-            nameFrusta = strrep(nameFrusta,'_forces.mat','');
-            edgesLength = cellTablesFrusta{i}.edgesLength;
-            cellEdgesAngle = cellTablesFrusta{i}.edgesAngle{j};
-            lambda = cellTablesFrusta{i}.Lambda;
-            edgesAdhesionEnergy = [edgesAdhesionEnergy, edgesLength{j}.*lambda(j)];
-            edgesAngles = [edgesAngles cellEdgesAngle];
-           
-        end
-        subplot(2,numSR,numSR+j);
-
-        for nEdges = 1:length(edgesAngles)
-            polarplot([0 edgesAngles(nEdges)],[0 abs(edgesAdhesionEnergy(nEdges))],'LineWidth',1,'Color',colour(3,:))
-            hold on
-        end
-
-        ax=gca;
-        ax.ThetaLimMode='manual';
-        ax.ThetaLim=[-90,90];
-        ax.GridAlpha=0.1;
-        ax.LineWidth=1;
-        ax.FontSize=10;
-        ax.FontName='Helvetica-Narrow';
-    end
     
-    savefig(h,[path2save 'PolarDistribution_AdhesionEnergy_' date])
-    print(h,[path2save 'PolarDistribution_AdhesionEnergy_' date],'-dtiff','-r300')
+    dir2save = [path2save 'PolarDistribution_AdhesionEnergy_' date];
+    param1 = 'edgesLength';
+    param2 = 'edgesAngle';
+    plotPolarGraphic(cellTablesVoronoi, cellTablesFrusta,param1,param2,polarGraphic,numSR,colour(2,:),colour(3,:),dotSize,angleCorrection,radLim,gridAlpha,lineWidth,fontSize,fontName,dir2save)      
+    
+    
     
 
 end
