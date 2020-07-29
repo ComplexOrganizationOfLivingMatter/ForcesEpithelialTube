@@ -3,7 +3,7 @@ function compareTissueProperties(cellTablesVoronoi,cellTablesFrusta,numSR,colour
     mkdir(path2save)
 
     angleCorrection = 0;
-    radLim = [0,360];
+    radLim = [-90,90];
     gridAlpha = 0.1;
     lineWidth = 1;
     fontSize = 12;
@@ -29,6 +29,12 @@ function compareTissueProperties(cellTablesVoronoi,cellTablesFrusta,numSR,colour
     param2 = 'cellOrientation';
     plotPolarGraphic(cellTablesVoronoi, cellTablesFrusta,param1,param2,polarGraphic,numSR,colour(2,:),colour(3,:),dotSize,angleCorrection,radLim,gridAlpha,lineWidth,fontSize,fontName,dir2save)      
     
-    close all
-   
+    %% Polar scatter axes relation - cell orientation
+    dir2save = [path2save 'PolarScatter_edgesLength_edgesAngle_' date];
+    dotSize = 3;
+    param1 = 'edgesLength';
+    param2 = 'edgesAngle';
+
+    plotPolarGraphic(cellTablesVoronoi, cellTablesFrusta,param1,param2,polarGraphic,numSR,colour(2,:),colour(3,:),dotSize,angleCorrection,radLim,gridAlpha,lineWidth,fontSize,fontName,dir2save)      
+       
 end

@@ -153,7 +153,7 @@ function compareEnergyPropertyIndividualCells(cellTablesVoronoi,cellTablesFrusta
     
     %% Polar histogram adhesion energy
     angleCorrection = 0;
-    radLim = [0,360];
+    radLim = [-90,90];
     gridAlpha = 0.1;
     lineWidth = 1;
     fontSize = 12;

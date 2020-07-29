@@ -12,19 +12,22 @@ function plotPolarGraphic(cellTablesVoronoi, cellTablesFrusta,param1,param2,pola
             angles = [angles valueFieldAngle(j)];
         end
         
+        if contains(param1,'edge')
+            cellsMagnitudeCat = horzcat(cellsMagnitude{:});
+            cellsMagnitude = cellsMagnitudeCat;
+            anglesCat = horzcat(angles{:});
+            angles = anglesCat - deg2rad(angleCorrection); 
+            angles = rad2deg(angles);
+        end
         
         if strcmp(lower(polarGraphic),'polarscatter')
-            subplot(2,numSR,j);
+            subplot(1,numSR,j);
             polarscatter(deg2rad(angles-angleCorrection),abs(cellsMagnitude),dotSize,'filled','MarkerFaceColor',colour1)
         end
         if strcmp(lower(polarGraphic),'polarplot')
-            cellsMagnitudeCat = horzcat(cellsMagnitude{:});
-            anglesCat = horzcat(angles{:});
-            anglesCat = anglesCat - deg2rad(angleCorrection);
-            
             subplot(2,numSR,j);
-            for nEdges = 1:length(anglesCat)
-                polarplot([0 anglesCat(nEdges)],[0 abs(cellsMagnitudeCat(nEdges))],'LineWidth',lineWidth,'Color',colour1)
+            for nEdges = 1:length(angles)
+                polarplot([0 deg2rad(angles(nEdges))],[0 abs(cellsMagnitude(nEdges))],'LineWidth',lineWidth,'Color',colour1)
                 hold on
             end
             hold off
@@ -51,19 +54,24 @@ function plotPolarGraphic(cellTablesVoronoi, cellTablesFrusta,param1,param2,pola
             angles = [angles valueFieldAngle(j)];
         end
 
+        if contains(param1,'edge')
+            cellsMagnitudeCat = horzcat(cellsMagnitude{:});
+            cellsMagnitude = cellsMagnitudeCat;
+            anglesCat = horzcat(angles{:});
+            angles = anglesCat - deg2rad(angleCorrection); 
+            angles = rad2deg(angles);
+        end
+        
         if strcmp(lower(polarGraphic),'polarscatter')
-           subplot(2,numSR,j+numSR);
+           subplot(1,numSR,j);
+           hold on
            polarscatter(deg2rad(angles-angleCorrection),abs(cellsMagnitude),dotSize,'filled','MarkerFaceColor',colour2)
         end
         if strcmp(lower(polarGraphic),'polarplot')
-             cellsMagnitudeCat = horzcat(cellsMagnitude{:});
-            anglesCat = horzcat(angles{:});
-            anglesCat = anglesCat - deg2rad(angleCorrection);
-
             subplot(2,numSR,j+numSR);
 
-            for nEdges = 1:length(anglesCat)
-                polarplot([0 anglesCat(nEdges)],[0 abs(cellsMagnitudeCat(nEdges))],'LineWidth',lineWidth,'Color',colour2)
+            for nEdges = 1:length(angles)
+                polarplot([0 deg2rad(angles(nEdges))],[0 abs(cellsMagnitude(nEdges))],'LineWidth',lineWidth,'Color',colour2)
                 hold on
             end
             hold off
