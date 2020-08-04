@@ -2,6 +2,7 @@ function tableEnergies = calculateEnergiesFile(rawVerticesTable,adhesion,l_c,con
     tableEnergies = table();
     columnsTable = {'SR','cellID','tipCell','borderCell','neighboursIDs','vertexesXY','edgesLength','edgesAngle','Area','Perimeter','majorAxisLength','minorAxisLength','axesLengthRelation','cellOrientation','Gamma','Lambda','l_c','adhesionEnergy','elasticEnergy','contractilityEnergy','numberOfApicoBasalTransitionsNext','isApicoBasalTransitionInNext'};
    
+    fixedNeighboursSize = 12;
     for nSr = 1:length(SR)
         
         srTable = rawVerticesTable(ismember(round(rawVerticesTable.Radius,3),round(SR(nSr),3)),:);
@@ -16,19 +17,20 @@ function tableEnergies = calculateEnergiesFile(rawVerticesTable,adhesion,l_c,con
             %get neighbours from repeated vertices
             idsNeigh = obtainNeighboursIDs(srTable,tableEnergiesRow.cellID);
             
-            tableEnergiesRow.neighboursIDs={idsNeigh};
+            tableEnergiesRow.neighboursIDs={createArrayWithFixedSize(idsNeigh, fixedNeighboursSize)};
             verticesCell = table2array(row2check(:,5:end));
             verticesCell(isnan(verticesCell))=[];
             if verticesCell(1:2)== verticesCell(end-1:end)
                 verticesCell = verticesCell(1:end-2);
             end
-            tableEnergiesRow.vertexesXY = {verticesCell};
+            
+            tableEnergiesRow.vertexesXY = {createArrayWithFixedSize(verticesCell, fixedNeighboursSize*2)};
 
             %get non-dimensional edges -> l/l_c  && non-dimensional area -> area/l_c^2
             [ls_edge_nd, ls_angles, cellArea, cellPerimeter, cellMajorAxisLength, cellMinorAxisLength, cellOrientation] = calculateLengthAngleNonDimensional([verticesCell,verticesCell(1:2)],l_c);
             
-            tableEnergiesRow.edgesLength = {ls_edge_nd};
-            tableEnergiesRow.edgesAngle = {ls_angles};
+            tableEnergiesRow.edgesLength = {createArrayWithFixedSize(ls_edge_nd, fixedNeighboursSize)};
+            tableEnergiesRow.edgesAngle = {createArrayWithFixedSize(ls_angles, fixedNeighboursSize)};
             tableEnergiesRow.Area = cellArea;
             tableEnergiesRow.Perimeter = cellPerimeter;
             tableEnergiesRow.majorAxisLength = cellMajorAxisLength;
