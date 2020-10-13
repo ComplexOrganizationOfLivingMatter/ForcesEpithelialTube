@@ -55,17 +55,23 @@ function tableEnergies = calculateEnergiesFile(rawVerticesTable,adhesion,l_c,con
                 id2check = ismember(round(tableEnergies.SR,3),round(SR(nSr-1),3)) & (tableEnergies.cellID == tableEnergiesRow.cellID);
                 rowAux2check = tableEnergies(id2check,:);
                 rowAux2check = rowAux2check(1,:);
-                nDifIntersection = length(setxor([rowAux2check.neighboursIDs{:}],idsNeigh));
+                idNeighsRowAuxNoNans = [rowAux2check.neighboursIDs{:}];
+                idNeighsRowAuxNoNans(isnan(idNeighsRowAuxNoNans)) = [];
+                nDifIntersection = length(setxor(idNeighsRowAuxNoNans,idsNeigh));
                 
-                tableEnergiesRow.numberOfApicoBasalTransitionsNext = rowAux2check.numberOfApicoBasalTransitionsNext + nDifIntersection;
-                if rowAux2check.numberOfApicoBasalTransitionsNext == 0
-                    tableEnergies(id2check,:).numberOfApicoBasalTransitionsNext = repmat(rowAux2check.numberOfApicoBasalTransitionsNext + nDifIntersection,sum(id2check),1);
-                end
+                
+                tableEnergies(id2check,:).numberOfApicoBasalTransitionsNext = repmat(nDifIntersection,sum(id2check),1);
                 tableEnergies(id2check,:).isApicoBasalTransitionInNext= repmat(nDifIntersection>0,sum(id2check),1);
+                
+  
+                tableEnergiesRow.numberOfApicoBasalTransitionsNext = 0;
+                tableEnergiesRow.isApicoBasalTransitionInNext = 0;
+
             end
             tableEnergies = [tableEnergies;tableEnergiesRow];
         end        
     end
     writetable(tableEnergies, [filePath2save '.xls']);
     save([filePath2save '.mat'],'tableEnergies')
+
 end
